@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, provide, markRaw } from 'vue'
 import { fabric } from 'fabric'
-import { useBasicShapes, useUtil, useSelection } from './uses/index'
+import { useBasicShapes, useUtil, useSelection, useGuideLines } from './uses/index'
 import ShapePanel from './components/shapePanel.vue';
 
 const canvas = ref({})
@@ -16,9 +16,10 @@ function canvasInit() {
     // 保持画布层级关系
     preserveObjectStacking: true,
     // 选框
-    selection: false,
+    selection: true,
     zoom: 1
   }))
+  useGuideLines(canvas.value)
   shapeHandler.value = useBasicShapes(canvas.value)
   util.value = useUtil(canvas.value)
   selection.value = useSelection(canvas.value)
@@ -35,12 +36,38 @@ onMounted(() => {
 
 </script>
 <template>
-  <div class="canvas-shape-panel">
-    <ShapePanel />
-  </div>
-  <div class="canvas-wrapper">
-    <canvas id="canvas" />
+  <div class="fabric-canvas">
+    <div class="canvas-shape-panel">
+      <ShapePanel />
+    </div>
+    <div class="canvas-playground">
+      <canvas id="canvas" />
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fabric-canvas {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-shape-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.canvas-playground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9
+}
+</style>
