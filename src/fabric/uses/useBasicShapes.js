@@ -1,4 +1,9 @@
+/**
+ * fabric basic shapes
+ */
 import { fabric } from 'fabric'
+
+const IMAGE_INITAL_SIZE = 200
 
 export const useBasicShapes = (canvas) => {
   function addText() {
@@ -6,15 +11,20 @@ export const useBasicShapes = (canvas) => {
     canvas.add(text)
   }
   function addTextbox() {
-    const textbox = new fabric.Textbox('hello world', { left: 100, top: 100 })
+    const textbox = new fabric.Textbox('hello world', {
+      left: 100,
+      top: 100
+    })
     canvas.add(textbox)
   }
   function addRect() {
     const rect = new fabric.Rect({
       width: 100,
       height: 80,
-      // stroke: '#94A684',
-      // strokeWidth: 2,
+      rx: 4,
+      ry: 4,
+      stroke: '#94A684',
+      strokeWidth: 2,
       strokeUniform: true,
       fill: '#AEC3AE'
     })
@@ -41,13 +51,84 @@ export const useBasicShapes = (canvas) => {
     })
     canvas.add(triangle)
   }
-  function addEllipse() {}
+  function addEllipse() {
+    const ellipse = new fabric.Ellipse({
+      rx: 100,
+      ry: 50,
+      fill: '#FFBFBF',
+      left: 50,
+      top: 50
+    })
+    canvas.add(ellipse)
+  }
 
-  function addLine() {}
+  function addLine() {
+    const line = new fabric.Line([20, 20, 100, 100], {
+      stroke: '#96C291',
+      strokeWidth: 2
+    })
+    canvas.add(line)
+  }
 
-  function addImage() {}
-  function addPolygon() {}
-  function addPolyline() {}
+  function addImage() {
+    let input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.onchange = (e) => {
+      const fileList = e.target.files
+      const file = fileList[0]
+      // console.log('input on change file', file)
+      const reader = new FileReader()
+      reader.onload = () => {
+        const url = reader.result
+        // console.log('url', url)
+        addImageFromUrl(url)
+      }
+      reader.readAsDataURL(file)
+    }
+    input.display = 'none'
+    input.click()
+  }
+
+  function addPolyline() {
+    const polyline = new fabric.Polyline(
+      [
+        { x: 10, y: 10 },
+        { x: 50, y: 10 },
+        { x: 60, y: 50 },
+        { x: 10, y: 50 }
+      ],
+      {
+        stroke: '#96C291',
+        strokeWidth: 2,
+        fill: null,
+        left: 100,
+        top: 100
+      }
+    )
+    canvas.add(polyline)
+  }
+
+  function addPolygon() {
+    const polygon = new fabric.Polyline(
+      [
+        { x: 10, y: 10 },
+        { x: 50, y: 10 },
+        { x: 60, y: 50 },
+        { x: 0, y: 50 },
+        { x: 10, y: 10 }
+      ],
+      {
+        stroke: null,
+        strokeWidth: 0,
+        strokeLineCap: 'butt',
+        fill: '#FFBFBF',
+        left: 100,
+        top: 100
+      }
+    )
+    canvas.add(polygon)
+  }
   function addPath() {
     const path = new fabric.Path(
       'M121.32,0L44.58,0C36.67,0,29.5,3.22,24.31,8.41\
@@ -64,6 +145,19 @@ export const useBasicShapes = (canvas) => {
       }
     )
     canvas.add(path)
+  }
+
+  // image from url
+  function addImageFromUrl(url) {
+    fabric.Image.fromURL(url, (image) => {
+      const { width } = image
+      const initialScale = IMAGE_INITAL_SIZE / width
+      image.set({
+        scaleX: initialScale,
+        scaleY: initialScale
+      })
+      canvas.add(image)
+    })
   }
 
   return {

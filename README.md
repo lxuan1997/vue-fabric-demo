@@ -1,5 +1,7 @@
 # vue-fabric-demo
 
+vue3 + fabric.js
+
 ## Project Setup
 
 ```sh
@@ -23,3 +25,15 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## Basic Shapes
+- [x] Rect
+- [x] Circle
+- [x] Triangle
+- [x] Ellipse
+- [x] Line
+- [x] Polyline
+- [x] Polygon
+- [x] Image
+- [x] Textbox
+
